@@ -37,3 +37,7 @@ exports.admin_post = (req, res, next) => {
 exports.about_get = (req, res, next) => {
   res.send("Not Implemented YET");
 };
+
+exports.delete_message_get = (req, res, next) => {
+  res.send("Not Implemented YET");
+}
