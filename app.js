@@ -19,9 +19,16 @@ app.set("views", path.join(__dirname, "views"));
 app.set("view engine", "ejs");
 
 // DB connection
-mongoose.connect(DB_STRING, { useUnifiedTopology: true, useNewUrlParser: true });
+mongoose.connect(DB_STRING, {
+  useUnifiedTopology: true,
+  useNewUrlParser: true,
+});
 const connection = mongoose.connection;
 connection.on("error", console.log.bind(console, "mongo connection error"));
 
+// Session Store
+const sessionStore = MongoStore.create({
+  mongoUrl: DB_STRING,
+});
 
 app.listen(PORT);
