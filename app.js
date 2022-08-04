@@ -11,6 +11,7 @@ require("dotenv").config();
 
 const PORT = process.env.PORT;
 const DB_STRING = process.env.DB_STRING;
+const SECRET = process.env.SECRET;
 
 const app = express();
 
@@ -29,6 +30,28 @@ connection.on("error", console.log.bind(console, "mongo connection error"));
 // Session Store
 const sessionStore = MongoStore.create({
   mongoUrl: DB_STRING,
+});
+
+// Middlewares
+app.use(express.json());
+app.use(express.urlencoded({ extended: false }));
+app.use(session({
+  secret: SECRET,
+  resave: false,
+  saveUninitialized: true,
+  store: sessionStore,
+  cookie: {
+    maxAge: 14 * 24 * 60 * 60 * 1000, // two weeks
+  }
+}));
+
+// TODO: passport LocalStrategy
+
+app.use(passport.initialize());
+app.use(passport.session());
+
+app.get("/", (req, res, next) => {
+  res.send("Hello World");
 });
 
 app.listen(PORT);
