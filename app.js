@@ -18,4 +18,10 @@ const app = express();
 app.set("views", path.join(__dirname, "views"));
 app.set("view engine", "ejs");
 
+// DB connection
+mongoose.connect(DB_STRING, { useUnifiedTopology: true, useNewUrlParser: true });
+const connection = mongoose.connection;
+connection.on("error", console.log.bind(console, "mongo connection error"));
+
+
 app.listen(PORT);
