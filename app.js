@@ -35,15 +35,17 @@ const sessionStore = MongoStore.create({
 // Middlewares
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
-app.use(session({
-  secret: SECRET,
-  resave: false,
-  saveUninitialized: true,
-  store: sessionStore,
-  cookie: {
-    maxAge: 14 * 24 * 60 * 60 * 1000, // two weeks
-  }
-}));
+app.use(
+  session({
+    secret: SECRET,
+    resave: false,
+    saveUninitialized: true,
+    store: sessionStore,
+    cookie: {
+      maxAge: 14 * 24 * 60 * 60 * 1000, // two weeks
+    },
+  })
+);
 
 // TODO: passport LocalStrategy
 
@@ -51,7 +53,7 @@ app.use(passport.initialize());
 app.use(passport.session());
 
 app.get("/", (req, res, next) => {
-  res.send("Hello World");
+  res.render("index");
 });
 
 app.listen(PORT);
