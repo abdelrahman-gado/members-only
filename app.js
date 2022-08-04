@@ -6,6 +6,7 @@ const LocalStrategy = require("passport-local").Strategy;
 const MongoStore = require("connect-mongo");
 const bycrpt = require("bcryptjs");
 const path = require("path");
+const membersRouter = require("./routes/membersRouter");
 
 require("dotenv").config();
 
@@ -55,5 +56,7 @@ app.use(passport.session());
 app.get("/", (req, res, next) => {
   res.render("index");
 });
+
+app.use(membersRouter);
 
 app.listen(PORT);
