@@ -15,11 +15,11 @@
       <form action="/message/add" method="POST">
         <div class="mb-3">
           <label for="titleInput" class="form-label">Title</label>
-          <input type="text" class="form-control" id="titleInput" name="title" placeholder="Hello World!">
+          <input type="text" class="form-control" id="titleInput" name="title" placeholder="Hello World!" required>
         </div>
         <div class="mb-3">
           <label for="textInput" class="form-label">Text</label>
-          <textarea class="form-control" id="textInput" name="text" placeholder="Leave a text here" style="height:300px"></textarea>
+          <textarea class="form-control" id="textInput" name="text" placeholder="Leave a text here" style="height:300px" required></textarea>
         </div>
         <div class="mt-4 mb-3 d-flex justify-content-center">
           <button type="submit" class="btn btn-primary" style="width:40%;">Submit</button>
