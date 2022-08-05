@@ -1,5 +1,5 @@
 exports.sign_up_get = (req, res, next) => {
-  res.send("Not Implemented YET");
+  res.render("sign-up");
 };
 
 exports.sign_up_post = (req, res, next) => {
@@ -7,7 +7,7 @@ exports.sign_up_post = (req, res, next) => {
 };
 
 exports.log_in_get = (req, res, next) => {
-  res.send("Not Implemented YET");
+  res.render("log-in");
 };
 
 exports.log_in_post = (req, res, next) => {
@@ -34,10 +34,18 @@ exports.admin_post = (req, res, next) => {
   res.send("Not Implemented YET");
 };
 
+exports.add_message_get = (req, res, next) => {
+  res.send("Not Implemneted YET");
+};
+
+exports.add_message_post = (req, res, next) => {
+  res.send("Not Implemneted YET");
+};
+
 exports.about_get = (req, res, next) => {
   res.send("Not Implemented YET");
 };
 
 exports.delete_message_get = (req, res, next) => {
   res.send("Not Implemented YET");
-}
+};
