@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>MembersOnly</title>
+</head>
+
+<body>
+  <%- include('header/header', { isAuth: false, joinned: false, isAdmin: false }); -%>
+    <h1 class="mx-4">Log in</h1>
+    <div class="card mx-4 px-4 py-3 flex-column">
+      <form action="/log-in" method="POST">
+        <div class="mb-3">
+          <label for="emailInput" class="form-label">Email Address</label>
+          <input type="email" class="form-control" id="emailInput" aria-describedby="emailHelp" name="email">
+        </div>
+        <div class="mb-3">
+          <label for="passwordInput" class="form-label">Password</label>
+          <input type="password" class="form-control" id="passwordInput" name="password">
+        </div>
+        <div class="mt-4 mb-3 d-flex justify-content-center">
+          <button type="submit" class="btn btn-primary" style="width:40%;">Submit</button>
+        </div>
+      </form>
+    </div>
+
+</body>
+
+</html>
