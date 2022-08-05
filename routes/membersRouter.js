@@ -15,6 +15,9 @@ router.post("/clubhouse", membersController.clubhouse_post);
 router.get("/admin", membersController.admin_get);
 router.post("/admin", membersController.admin_post);
 
+router.get("/message/add", membersController.add_message_get);
+router.post("/message/add", membersController.add_message_post);
+
 router.get("/about", membersController.about_get);
 
 router.get("/log-out", membersController.log_out_get);
