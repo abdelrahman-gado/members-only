@@ -7,6 +7,8 @@ const MongoStore = require("connect-mongo");
 const bycrpt = require("bcryptjs");
 const path = require("path");
 const membersRouter = require("./routes/membersRouter");
+const User = require("./models/user");
+const bcrypt = require("bcryptjs");
 
 require("dotenv").config();
 
@@ -48,13 +50,40 @@ app.use(
   })
 );
 
-// TODO: passport LocalStrategy
+passport.use(
+  new LocalStrategy(
+    { username: "email", password: "password" },
+    (email, password, cb) => {
+      User.find({ email: email }, (err, user) => {
+        if (err) {
+          return cb(err);
+        }
+
+        if (!user) {
+          return cb(null, false, { message: "Incorrect username" });
+        }
+
+        bcrypt.compare(password, user.password, (err, res) => {
+          if (err) {
+            return cb(err);
+          }
+
+          if (res) {
+            return cb(null, user);
+          } else {
+            return cb(null, false, { message: "Incorrect password" });
+          }
+        });
+      });
+    }
+  )
+);
 
 app.use(passport.initialize());
 app.use(passport.session());
 
 app.get("/", (req, res, next) => {
-  res.render("index");
+  res.render("index", { isAuth: req.isAuthenticated() });
 });
 
 app.use(membersRouter);
