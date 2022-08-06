@@ -1,11 +1,12 @@
 const { body, validationResult } = require("express-validator");
 const User = require("../models/user");
 const bcrypt = require("bcryptjs");
+const passport = require("passport");
 
 exports.sign_up_get = (req, res, next) => {
   res.render("sign-up", {
     isAuth: req.isAuthenticated(),
-    errors: undefined
+    errors: undefined,
   });
 };
 
@@ -43,7 +44,7 @@ exports.sign_up_post = [
   body("confirmPassword")
     .custom((value, { req, loc, path }) => {
       console.log(value);
-      console.log(req.body.password)
+      console.log(req.body.password);
       if (value !== req.body.password) {
         throw new Error("Password doesn't match");
       } else {
@@ -98,15 +99,45 @@ exports.sign_up_post = [
 ];
 
 exports.log_in_get = (req, res, next) => {
-  res.render("log-in");
+  res.render("log-in", { isAuth: req.isAuthenticated(), errs: undefined });
 };
 
-exports.log_in_post = (req, res, next) => {
-  res.send("Not Implemented YET");
-};
+exports.log_in_post = [
+  body("email", "Email must be specified correctly")
+    .isEmail()
+    .normalizeEmail()
+    .escape(),
+
+  body("password", "Password must be specified correctly").escape(),
+
+  passport.authenticate("local", {
+    failureRedirect: "log-in",
+    failureMessage: "Incorrect username and passowrd",
+  }),
+
+  (req, res, next) => {
+
+    const errors = validationResult(req);
+
+    if (!errors.isEmpty()) {
+      res.render("log-in", {
+        isAuth: req.isAuthenticated(),
+        errs: errors.array(),
+      });
+      return;
+    } else {
+      res.redirect("/");
+    }
+  },
+];
 
 exports.log_out_get = (req, res, next) => {
-  res.send("Not Implemented YET");
+  req.logout((err) => {
+    if (err) {
+      return next(err);
+    }
+  });
+  res.redirect("/");
 };
 
 exports.clubhouse_get = (req, res, next) => {
