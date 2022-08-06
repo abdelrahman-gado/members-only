@@ -2,6 +2,8 @@ const { body, validationResult } = require("express-validator");
 const User = require("../models/user");
 const bcrypt = require("bcryptjs");
 const passport = require("passport");
+const Message = require("../models/message");
+const user = require("../models/user");
 
 exports.sign_up_get = (req, res, next) => {
   res.render("sign-up", {
@@ -116,7 +118,6 @@ exports.log_in_post = [
   }),
 
   (req, res, next) => {
-
     const errors = validationResult(req);
 
     if (!errors.isEmpty()) {
@@ -157,15 +158,52 @@ exports.admin_post = (req, res, next) => {
 };
 
 exports.add_message_get = (req, res, next) => {
-  res.render("add-message");
+  res.render("add-message", { isAuth: req.isAuthenticated(), errs: undefined });
 };
 
-exports.add_message_post = (req, res, next) => {
-  res.send("Not Implemneted YET");
-};
+exports.add_message_post = [
+  body("title")
+    .isLength({ min: 1, max: 100 })
+    .withMessage(
+      "title must be greater than 1 character and not exceed 100 characters"
+    )
+    .escape(),
 
+  body("text", "message content must be specified")
+    .isLength({ min: 1 })
+    .escape(),
+
+  (req, res, next) => {
+    
+    const errors = validationResult(req);
+
+    if (!errors.isEmpty()) {
+      res.render("add-message", {
+        isAuth: req.isAuthenticated(),
+        errs: errors.array(),
+      });
+      return;
+    } else {
+      
+      const newMessage = new Message({
+        title: req.body.title,
+        timestamp: new Date(),
+        content: req.body.text,
+        user: req.user._id
+      });
+
+      newMessage.save((err) => {
+        if (err) {
+          return next(err);
+        }
+      });
+
+      res.redirect("/");
+    }
+  },
+];
 exports.about_get = (req, res, next) => {
-  res.render("about.ejs");
+  res.render("about.ejs", { isAuth: req.isAuthenticated() });
 };
 
 exports.delete_message_get = (req, res, next) => {
