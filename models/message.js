@@ -6,7 +6,7 @@ const messageSchema = new Schema({
   title: { type: String, required: true, maxLength: 100 },
   timestamp: { type: Date, required: true },
   content: { type: String, required: true },
-  User: { type: Schema.Types.ObjectId, ref: "User", required: true },
+  user: { type: Schema.Types.ObjectId, ref: "User", required: true },
 });
 
 messageSchema.virtual("id").get(function () {
