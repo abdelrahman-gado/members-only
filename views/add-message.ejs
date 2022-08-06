@@ -9,7 +9,7 @@
 </head>
 
 <body>
-  <%- include('header/header', { isAuth: false, joinned: false, isAdmin: false }); -%>
+  <%- include('header/header', { isAuth: isAuth }); -%>
     <h1 class="mx-4">Add Message</h1>
     <div class="card mx-4 px-4 py-3 flex-column">
       <form action="/message/add" method="POST">
@@ -27,6 +27,13 @@
       </form>
     </div>
 
+    <% if (typeof errs !=='undefined' ) { %>
+      <% for (let err of errs) { %>
+        <div class="mx-4 mt-2 alert alert-danger" role="alert">
+          <%= err.msg %>
+        </div>
+      <% } %>
+    <% } %>
 </body>
 
 </html>
