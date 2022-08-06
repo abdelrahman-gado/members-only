@@ -8,7 +8,7 @@ const userSchema = new Schema({
   email: { type: String, required: true, maxLength: 100 },
   password: { type: String, required: true },
   salt: { type: String, required: true },
-  membership: { type: Boolean, required: true },
+  membership: { type: String, enum: ["normal", "clubhoused", "admin"] ,required: true },
 });
 
 userSchema.virtual("fullname").get(function () {
