@@ -185,12 +185,40 @@ exports.clubhouse_post = [
 ];
 
 exports.admin_get = (req, res, next) => {
-  res.render("admin-form", { isAuth: req.isAuthenticated() });
+  res.render("admin-form", { isAuth: req.isAuthenticated(), errs: undefined });
 };
 
-exports.admin_post = (req, res, next) => {
-  res.send("Not Implemented YET");
-};
+exports.admin_post = [
+  body("password", "password must be specified correctly").escape(),
+
+  (req, res, next) => {
+    const errors = validationResult(req);
+
+    if (!errors.isEmpty()) {
+      res.render("admin-form", {
+        isAuth: req.isAuthenticated(),
+        errs: errors.array(),
+      });
+      return;
+    } else {
+      if (req.body.password === "admin" && req.isAuthenticated()) {
+        User.findByIdAndUpdate(req.user._id, { membership: "admin" }, (err) => {
+          if (err) {
+            return next(err);
+          }
+        });
+
+        res.redirect("/");
+      } else {
+        res.render("admin-form", {
+          isAuth: req.isAuthenticated(),
+          errs: [new Error("Incorrect Password")],
+        });
+        return;
+      }
+    }
+  },
+];
 
 exports.add_message_get = (req, res, next) => {
   res.render("add-message", { isAuth: req.isAuthenticated(), errs: undefined });
