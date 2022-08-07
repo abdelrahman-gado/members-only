@@ -142,15 +142,50 @@ exports.log_out_get = (req, res, next) => {
 };
 
 exports.clubhouse_get = (req, res, next) => {
-  res.render("clubhouse-form");
+  res.render("clubhouse-form", {
+    isAuth: req.isAuthenticated(),
+    errs: undefined,
+  });
 };
 
-exports.clubhouse_post = (req, res, next) => {
-  res.send("Not Implemented YET");
-};
+exports.clubhouse_post = [
+  body("password", "password must be specified correctly").escape(),
+
+  (req, res, next) => {
+    const errors = validationResult(req);
+
+    if (!errors.isEmpty()) {
+      res.render("clubhouse-form", {
+        isAuth: req.isAuthenticated(),
+        errs: errors.array(),
+      });
+      return;
+    } else {
+      if (req.body.password === "clubhouse" && req.isAuthenticated()) {
+        User.findByIdAndUpdate(
+          req.user._id,
+          { membership: "clubhoused" },
+          (err) => {
+            if (err) {
+              return next(err);
+            }
+          }
+        );
+
+        res.redirect("/");
+      } else {
+        res.render("clubhouse-form", {
+          isAuth: req.isAuthenticated(),
+          errs: [new Error("Incorrct Password")],
+        });
+        return;
+      }
+    }
+  },
+];
 
 exports.admin_get = (req, res, next) => {
-  res.render("admin-form");
+  res.render("admin-form", { isAuth: req.isAuthenticated() });
 };
 
 exports.admin_post = (req, res, next) => {
@@ -174,7 +209,6 @@ exports.add_message_post = [
     .escape(),
 
   (req, res, next) => {
-    
     const errors = validationResult(req);
 
     if (!errors.isEmpty()) {
@@ -184,12 +218,11 @@ exports.add_message_post = [
       });
       return;
     } else {
-      
       const newMessage = new Message({
         title: req.body.title,
         timestamp: new Date(),
         content: req.body.text,
-        user: req.user._id
+        user: req.user._id,
       });
 
       newMessage.save((err) => {
@@ -202,6 +235,7 @@ exports.add_message_post = [
     }
   },
 ];
+
 exports.about_get = (req, res, next) => {
   res.render("about.ejs", { isAuth: req.isAuthenticated() });
 };
