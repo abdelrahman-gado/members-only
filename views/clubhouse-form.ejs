@@ -9,7 +9,7 @@
 </head>
 
 <body>
-  <%- include('header/header', { isAuth: false, joinned: false, isAdmin: false }); -%>
+  <%- include('header/header', { isAuth: isAuth }); -%>
     <h1 class="mx-4">Clubhouse Verification</h1>
     <p class="form-text mx-4">Enter the clubhouse password to get access to who and when wrote a message.</p>
     <div class="card mx-4 px-4 py-3 flex-column">
@@ -24,6 +24,14 @@
         </div>
       </form>
     </div>
+
+    <% if (typeof errs !=='undefined' ) { %>
+      <% for (let err of errs) { %>
+        <div class="mx-4 mt-2 alert alert-danger" role="alert">
+          <%= err.msg %>
+        </div>
+      <% } %>
+    <% } %>
 
 </body>
 
