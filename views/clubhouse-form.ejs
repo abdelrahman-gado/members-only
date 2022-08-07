@@ -28,7 +28,7 @@
     <% if (typeof errs !=='undefined' ) { %>
       <% for (let err of errs) { %>
         <div class="mx-4 mt-2 alert alert-danger" role="alert">
-          <%= err.msg %>
+          <%= err.msg || err.message %>
         </div>
       <% } %>
     <% } %>
