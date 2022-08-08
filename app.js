@@ -9,6 +9,7 @@ const path = require("path");
 const membersRouter = require("./routes/membersRouter");
 const User = require("./models/user");
 const bcrypt = require("bcryptjs");
+const Message = require("./models/message");
 
 require("dotenv").config();
 
@@ -52,9 +53,9 @@ app.use(
 
 passport.use(
   new LocalStrategy(
-    { username: "email", password: "password" },
+    { usernameField: "email", passwordField: "password" },
     (email, password, cb) => {
-      User.find({ email: email }, (err, user) => {
+      User.findOne({ email: email }, (err, user) => {
         if (err) {
           return cb(err);
         }
@@ -79,11 +80,93 @@ passport.use(
   )
 );
 
+passport.serializeUser((user, cb) => {
+  cb(null, user.id);
+});
+
+passport.deserializeUser((id, cb) => {
+  User.findById(id, (err, user) => {
+    if (err) {
+      return cb(err);
+    }
+
+    cb(null, user);
+  });
+});
+
 app.use(passport.initialize());
 app.use(passport.session());
 
 app.get("/", (req, res, next) => {
-  res.render("index", { isAuth: req.isAuthenticated() });
+  if (!req.isAuthenticated()) {
+    Message.find({}, (err, result) => {
+      if (err) {
+        return next(err);
+      }
+      res.render("index", {
+        isAuth: false,
+        results: result,
+        userFullname: undefined,
+        usertype: undefined,
+      });
+    });
+
+    return;
+  } else if (req.isAuthenticated() && req.user.membership === "normal") {
+    Message.find({}, (err, result) => {
+      if (err) {
+        return next(err);
+      }
+
+      res.render("index", {
+        isAuth: true,
+        results: result,
+        userFullname: req.user.fullname,
+        usertype: "normal",
+      });
+    });
+
+    return;
+
+  } else if (req.isAuthenticated() && req.user.membership === "clubhoused") {
+
+    Message.find({})
+      .populate("user")
+      .exec((err, result) => {
+        if (err) {
+          return next(err);
+        }
+
+        res.render("index", {
+          isAuth: true,
+          results: result,
+          userFullname: req.user.fullname,
+          usertype: "clubhoused"
+        });
+
+      });
+    
+    return;
+    
+  } else if (req.isAuthenticated() && req.user.membership === "admin") {
+    Message.find({})
+      .populate("user")
+      .exec((err, result) => {
+        if (err) {
+          return next(err);
+        }
+
+        res.render("index", {
+          isAuth: true,
+          results: result,
+          userFullname: req.user.fullname,
+          usertype: "admin",
+        });
+      });
+
+    return;
+  }
+
 });
 
 app.use(membersRouter);
