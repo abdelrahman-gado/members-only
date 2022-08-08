@@ -269,5 +269,13 @@ exports.about_get = (req, res, next) => {
 };
 
 exports.delete_message_get = (req, res, next) => {
-  res.send("Not Implemented YET");
+  const messageID = req.params.id;
+
+  Message.findByIdAndDelete(messageID).exec(err => {
+    if (err) {
+      return next(err);
+    }
+
+    res.redirect("/");
+  });
 };
