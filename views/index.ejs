@@ -7,6 +7,26 @@
   <title>Document</title>
 </head>
 <body>
-  <%- include('header/header', { isAuth: false }); -%>
+  <%- include('header/header', { isAuth: isAuth }); -%>
+  <h2 class="mx-4 mt-2">Welcome <%= (isAuth && userFullname !== undefined) ? userFullname : "" %>!</h2>
+
+  <% for (const message of results) { %>
+    <div class="card mx-4 mt-2">
+      <div class="card-header d-flex justify-content-between align-items-center">
+        <h5 style="margin:0;"><%= (isAuth && (usertype === "clubhoused" || usertype === "admin")) ? message.user.fullname : "anonymous user" %></h5>
+        <% if (isAuth && usertype === "admin") { %>
+          <a href="/message/delete/<%= message.id %>" class="btn btn-danger">delete</a>
+        <% } %>
+      </div>
+      <div class="card-body">
+        <h5 class="card-title"><%= message.title %></h5>
+        <p class="card-text"><%= message.content %></p>
+      </div>
+      <div class="card-footer">
+        created at: <%= (isAuth && (usertype === "clubhoused" || usertype === "admin")) ? message.formattedTimestamp : "anonymous time" %>
+      </div>
+    </div>
+  <% } %>
+
 </body>
 </html>
