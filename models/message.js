@@ -10,7 +10,7 @@ const messageSchema = new Schema({
 });
 
 messageSchema.virtual("id").get(function () {
-  return "/message/delete/" + this._id;
+  return this._id;
 });
 
 module.exports = mongoose.model("Message", messageSchema);
