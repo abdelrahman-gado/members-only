@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>MembersOnly</title>
+</head>
+
+<body>
+  <%- include('header/header', { isAuth: isAuth }); -%>
+    <h1 class="mx-4">Admin Verification</h1>
+    <p class="form-text mx-4">Enter the admin password to get full access.</p>
+    <div class="card mx-4 px-4 py-3 flex-column">
+      <form action="/admin" method="POST">
+        <div class="mb-3">
+          <label for="passwordInput" class="form-label">Password</label>
+          <input type="password" class="form-control" id="passwordInput" name="password" placeholder="password"
+            required>
+        </div>
+        <div class="mt-4 mb-3 d-flex justify-content-center">
+          <button type="submit" class="btn btn-primary" style="width:40%;">Submit</button>
+        </div>
+      </form>
+    </div>
+
+    <% if (typeof errs !=='undefined') { %>
+      <% for (let err of errs) { %>
+        <div class="mx-4 mt-2 alert alert-danger" role="alert">
+          <%= err.msg || err.message %>
+        </div>
+      <% } %>
+    <% } %>
+
+</body>
+
+</html>
