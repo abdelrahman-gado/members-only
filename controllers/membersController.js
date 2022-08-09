@@ -161,7 +161,7 @@ exports.clubhouse_post = [
       });
       return;
     } else {
-      if (req.body.password === "clubhouse" && req.isAuthenticated()) {
+      if (req.body.password === process.env.CLUBHOUSE_PASSWORD && req.isAuthenticated()) {
         User.findByIdAndUpdate(
           req.user._id,
           { membership: "clubhoused" },
@@ -201,7 +201,7 @@ exports.admin_post = [
       });
       return;
     } else {
-      if (req.body.password === "admin" && req.isAuthenticated()) {
+      if (req.body.password === process.env.ADMIN_PASSWORD && req.isAuthenticated()) {
         User.findByIdAndUpdate(req.user._id, { membership: "admin" }, (err) => {
           if (err) {
             return next(err);
