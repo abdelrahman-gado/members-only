@@ -1,6 +1,9 @@
 {
   "name": "members-only",
   "version": "1.0.0",
+  "engines": {
+    "node": "16.15.0"
+  },
   "description": "An exclusive clubhouse where members can write anonymous posts using Express, PassportJS and MongoDB.",
   "main": "app.js",
   "scripts": {
