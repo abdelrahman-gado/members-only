@@ -1,5 +1,5 @@
 # members-only
-An exclusive clubhouse where members can write anonymous posts using Express, PassportJS and MongoDB.
+An exclusive clubhouse where members can write anonymous posts using Express, PassportJS and MongoDB. Anyone who comes to the site should be able to see a list of all messages, with the author’s name hidden. Users should be able to sign-up and create messages, but ONLY users that are members should be able to see the author and date of each message. Finally, users who are an admin user can see everything and also has the ability to delete messages.
 
 A simple live demo of the website is found [here](https://afternoon-plains-39323.herokuapp.com/)
 
